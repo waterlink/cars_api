@@ -1,0 +1,9 @@
+crate:
+  image: crate
+  ports:
+    - "4200:4200"
+    - "4300:4300"
+  volumes:
+    - "/mnt/data/create:/data"
+    - "./config/crate.io.yml:/crate.yml"
+  command: crate -Des.config=/crate.yml -Des.cluster.name=carsapi
