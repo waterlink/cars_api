@@ -46,6 +46,24 @@ To install this gem onto your local machine, run `bundle exec rake install`.
 
 To run the test suite, run `bundle exec rake`.
 
+### Using with JRuby
+
+To run development JVM server, use `bin/jruby-dev-server`. When running any
+ruby command (like tests):
+
+- `source .env.dev`
+- don't use `bundle exec`
+- just run command and see its output as the STDOUT/ERR output of
+  `bin/jruby-dev-server`
+
+For example to run tests:
+
+```bash
+$ source .env.dev
+$ rake
+# => Output goes to different terminal (optimally, `tmux` window)
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
