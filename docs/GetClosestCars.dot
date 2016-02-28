@@ -1,0 +1,13 @@
+digraph G {
+  {rank=source; Caller;};
+  {rank=min; Request; Response;};
+  {rank=same; CarStore; Car;};
+  {rank=max; "CarStore implementation";};
+  Caller -> {Request; Response; GetClosestCars;};
+  GetClosestCars -> Request [label="called with request\ncontaining N"];
+  GetClosestCars -> Response [label="returns response\nwith raw data"];
+  GetClosestCars -> CarStore [label="gives N and\nreceives sorted car list"];
+  GetClosestCars -> Car [label="constructs response as a\nlist of cars as raw data"];
+  CarStore -> Car [label="knows how to construct Car from the data"];
+  "CarStore implementation" -> CarStore [label="implements necessary\nIO to fetch cars data"];
+}
