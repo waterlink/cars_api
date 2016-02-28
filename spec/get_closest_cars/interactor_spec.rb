@@ -9,10 +9,12 @@ module CarsApi
       let(:car_3) { Car["Car 3", Location[11.7, 15.4]] }
       let(:car_4) { Car["Car 4", Location[12.1, 14.9]] }
 
-      let(:car_store) { InMemory::CarStore.new([
-        car_1, car_2, car_3, car_4,
-      ]) }
-      
+      let(:car_store) do
+        InMemory::CarStore.new(
+          [car_1, car_2, car_3, car_4]
+        )
+      end
+
       let(:location) { Location[11.9, 15.2] }
 
       subject(:interactor) { Interactor.new(car_store) }
@@ -40,15 +42,15 @@ module CarsApi
       it "returns response with cars when there are some cars" do
         request = Request[location, 10]
         response = interactor.call(request)
-        expect(response.cars.map(&:car)).to eq([
-          car_1, car_3, car_2, car_4,
-        ])
+        expect(response.cars.map(&:car)).to eq(
+          [car_1, car_3, car_2, car_4]
+        )
 
         request = Request[location, 2]
         response = interactor.call(request)
-        expect(response.cars.map(&:car)).to eq([
-          car_1, car_3,
-        ])
+        expect(response.cars.map(&:car)).to eq(
+          [car_1, car_3]
+        )
       end
 
       it "returns response with distances in kms" do
@@ -56,7 +58,7 @@ module CarsApi
         response = interactor.call(request)
 
         expected = [24.45, 31.14]
-          .map { |x| be_within(0.01).of(x) }
+                   .map { |x| be_within(0.01).of(x) }
         expect(response.cars.map(&:distance))
           .to match(expected)
 
@@ -64,7 +66,7 @@ module CarsApi
         response = interactor.call(request)
 
         expected = [24.45, 31.14]
-          .map { |x| be_within(0.01).of(x) }
+                   .map { |x| be_within(0.01).of(x) }
         expect(response.cars.map(&:distance))
           .to match(expected)
       end
@@ -74,7 +76,7 @@ module CarsApi
         response = interactor.call(request)
 
         expected = [15.19, 19.35]
-          .map { |x| be_within(0.01).of(x) }
+                   .map { |x| be_within(0.01).of(x) }
         expect(response.cars.map(&:distance))
           .to match(expected)
       end

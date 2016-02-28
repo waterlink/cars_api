@@ -3,6 +3,7 @@ require "geokit"
 
 module CarsApi
   module InMemory
+    # job: InMemory::CarStore understands cars data.
     class CarStore
       def initialize(data = [])
         @data = data
@@ -23,7 +24,7 @@ module CarsApi
         GEOCALC.distance_between(
           a.to_a,
           b.to_a,
-          units: units,
+          units: units
         )
       end
 
@@ -33,11 +34,12 @@ module CarsApi
           distance_between(
             location,
             car.location,
-            units,
-          ),
+            units
+          )
         ]
       end
 
+      # :nodoc:
       class GeoCalc
         include Geokit::Mappable::ClassMethods
       end

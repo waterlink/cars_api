@@ -14,9 +14,9 @@ module CarsApi
 
           it "returns empty when no data" do
             cars = CarStore
-              .new
-              .get_closest(location, 10)
-              .map(&:car)
+                   .new
+                   .get_closest(location, 10)
+                   .map(&:car)
             expect(cars).to eq([])
           end
 
@@ -47,7 +47,7 @@ module CarsApi
 
             cars = store.get_closest(location, 10)
             expected = [6.18, 6.98]
-              .map { |x| be_within(0.01).of(x) }
+                       .map { |x| be_within(0.01).of(x) }
 
             expect(cars.map(&:distance))
               .to match(expected)
@@ -58,7 +58,7 @@ module CarsApi
 
             cars = store.get_closest(location, 10, :kms)
             expected = [6.18, 6.98]
-              .map { |x| be_within(0.01).of(x) }
+                       .map { |x| be_within(0.01).of(x) }
 
             expect(cars.map(&:distance))
               .to match(expected)
@@ -69,7 +69,7 @@ module CarsApi
 
             cars = store.get_closest(location, 10, :miles)
             expected = [3.84, 4.34]
-              .map { |x| be_within(0.01).of(x) }
+                       .map { |x| be_within(0.01).of(x) }
 
             expect(cars.map(&:distance))
               .to match(expected)
