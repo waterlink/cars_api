@@ -64,6 +64,45 @@ $ rake
 # => Output goes to different terminal (optimally, `tmux` window)
 ```
 
+## UseCase: Get N closest cars to the current location
+
+![Get N closest cars to the current location](http://g.gravizo.com/g?
+  digraph G {
+    {rank=source; Caller;};
+    {rank=min; Request; Response;};
+    {rank=same; CarStore; Car;};
+    {rank=max; "CarStore implementation";};
+    Caller -> {Request; Response; GetClosestCars;};
+    GetClosestCars -> Request [label="called with request\ncontaining N"];
+    GetClosestCars -> Response [label="returns response\nwith raw data"];
+    GetClosestCars -> CarStore [label="gives N and\nreceives sorted car list"];
+    GetClosestCars -> Car [label="constructs response as a\nlist of cars as raw data"];
+    CarStore -> Car [label="knows how to construct Car from the data"];
+    "CarStore implementation" -> CarStore [label="implements necessary\nIO to fetch cars data"];
+  }
+)
+
+## UseCase: Initial import of cars data from the source
+
+![Initial import of cars data from the source](http://g.gravizo.com/g?
+  digraph G {
+    {rank=source; Caller;};
+    {rank=min; Request; Response;};
+    {rank=same; InitialImport; DataSource;};
+    {rank=same; CarStore; Car;};
+    {rank=max; "CarStore implementation"; "DataSource implementation";};
+    Caller -> {Request; Response; InitialImport;};
+    InitialImport -> Request [label="called with request\ncontaining data source"];
+    InitialImport -> DataSource [label="knows how to work with\ndata source one car at a time"];
+    InitialImport -> Response [label="returns response with\nindication of success or an error"];
+    InitialImport -> Car [label="constructs car instances\nfrom data source"];
+    InitialImport -> CarStore [label="resets data and\npersists constructed cars"];
+    CarStore -> Car [label="knows how to\npersist car data"];
+    "DataSource implementation" -> DataSource [label="implements necessary\nIO to read car data\nfrom the source"];
+    "CarStore implementation" -> CarStore [label="implements necessary IO\nto persist cars"];
+  }
+)
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
