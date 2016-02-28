@@ -1,0 +1,11 @@
+language: ruby
+
+rvm:
+  - 2.1
+  - 2.2
+  - 2.3
+  - jruby
+
+script:
+  - rake
+  - rubocop
