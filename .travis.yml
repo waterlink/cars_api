@@ -5,10 +5,11 @@ dist: trusty
 rvm:
   - 2.1
   - 2.2
-  - 2.3
+  - ruby-2.3.0
   - jruby
 
 before_install:
+  - rvm get head
   - gem install bundler
 
 script:
