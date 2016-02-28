@@ -28,4 +28,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
+
+  # This is used only in InMemory implementations and in integration tests to
+  # verify that real implementations return sane values.
+  spec.add_dependency "geokit", "~> 1.10"
 end
