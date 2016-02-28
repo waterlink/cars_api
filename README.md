@@ -1,4 +1,4 @@
-# CarsApi
+# CarsApi [![Build Status](https://travis-ci.org/waterlink/cars_api.svg?branch=master)](https://travis-ci.org/waterlink/cars_api)
 
 Car sharing API, that shows best car sharing options around the user's
 location.
