@@ -6,10 +6,11 @@ rvm:
   - 2.1
   - 2.2
   - ruby-2.3.0
-  - jruby
+  - jruby-20mode
+  - jruby-21mode
+  - jruby-9000
 
 before_install:
-  - rvm get head
   - gem install bundler
 
 script:
