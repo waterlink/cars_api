@@ -2,13 +2,16 @@ language: ruby
 
 dist: trusty
 
-rvm:
-  - 2.1
-  - 2.2
-  - ruby-2.3.0
-  - jruby-20mode
-  - jruby-21mode
-  - jruby-9000
+matrix:
+  - rvm: 2.1
+  - rvm: 2.2
+  - rvm: ruby-2.3.0
+  - rvm: jruby-20mode
+    env: JRUBY_OPTS="--2.0"
+  - rvm: jruby-21mode
+    env: JRUBY_OPTS="--2.1"
+  - rvm: jruby-9000
+    env: JRUBY_OPTS="--2.2"
 
 before_install:
   - gem install bundler
