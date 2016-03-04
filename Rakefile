@@ -18,7 +18,8 @@ begin
     _name = :flog,
     _threshold = 10,
     _dirs = code_dirs,
-    _method = :max_method
+    _method = :max_method,
+    _methods_only = true
   )
 rescue LoadError
   puts "Unable to load Flog rake task"
@@ -55,7 +56,7 @@ begin
 
   CustomFlayTask.new(
     _name = :flay,
-    _threshold = 7,
+    _threshold = 10,
     _dirs = code_dirs
   )
 rescue LoadError
