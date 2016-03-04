@@ -8,6 +8,21 @@ module CarsApi
     # Response represents InitialImport use case output data
     Response = Struct.new(:ok, :error)
 
+    # ResponseFactory understands construction of Response
+    module ResponseFactory
+      def self.from_result(result)
+        from_error(from_ok(result)).unwrap!
+      end
+
+      def self.from_ok(ok)
+        ok.when_ok { Response[true, nil] }
+      end
+
+      def self.from_error(error)
+        error.when_error { |message| Response[false, message] }
+      end
+    end
+
     # Describes protocol for DataSource required by InitialImport
     class DataSourceProtocol
       # @!group Required Methods
@@ -27,11 +42,11 @@ module CarsApi
       # @!method save(car)
       #   Saves a car to a car store
       #   @param car [Car] Car to save
-      #   @return [String] Error message, nil if succeeded
+      #   @return [Result::ResultProtocol] Result or an error message
 
       # @!method clear
       #   Clears data from the car store. Use with caution
-      #   @return [String] Error message, nil if succeeded
+      #   @return [Result::ResultProtocol] Result or an error message
 
       # @!endgroup
     end

@@ -56,7 +56,7 @@ begin
 
   CustomFlayTask.new(
     _name = :flay,
-    _threshold = 7,
+    _threshold = 10,
     _dirs = code_dirs
   )
 rescue LoadError

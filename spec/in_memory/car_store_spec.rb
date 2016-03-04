@@ -4,6 +4,7 @@ require "cars_api/initial_import"
 require "cars_api/location"
 
 module CarsApi
+  # rubocop:disable Metrics/ModuleLength
   module InMemory
     RSpec.describe CarStore do
       let(:car_a) { Car["First", Location[51.511318, -0.318178]] }
@@ -107,6 +108,11 @@ module CarsApi
             store.clear
             expect(store).to eq(CarStore.new([]))
           end
+
+          it "returns ok" do
+            store = CarStore.new([car_a, car_b])
+            expect(store.clear).to eq(Result.ok(nil))
+          end
         end
 
         describe "#save" do
@@ -121,8 +127,14 @@ module CarsApi
               CarStore.new([car_b, car_a])
             )
           end
+
+          it "returns nil" do
+            store = CarStore.new([])
+            expect(store.save(car_b)).to eq(Result.ok(nil))
+          end
         end
       end
     end
   end
+  # rubocop:enable Metrics/ModuleLength
 end
