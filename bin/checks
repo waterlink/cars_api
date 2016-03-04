@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -e
+
+rake
+rubocop
+reek
+rake -t flog
+rake -t flay

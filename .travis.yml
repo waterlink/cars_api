@@ -18,8 +18,4 @@ before_install:
   - gem install bundler
 
 script:
-  - rake
-  - rubocop
-  - reek
-  - rake -t flog
-  - rake -t flay
+  - bin/checks
