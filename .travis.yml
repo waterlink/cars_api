@@ -22,3 +22,4 @@ script:
   - rubocop
   - reek
   - rake -t flog
+  - rake -t flay
