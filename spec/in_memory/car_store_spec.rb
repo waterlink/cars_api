@@ -1,5 +1,6 @@
 require "cars_api/in_memory/car_store"
 require "cars_api/get_closest_cars"
+require "cars_api/location"
 
 module CarsApi
   module InMemory
@@ -47,7 +48,7 @@ module CarsApi
 
             cars = store.get_closest(location, 10)
             expected = [6.18, 6.98]
-                       .map { |x| be_within(0.01).of(x) }
+                       .map { |distance| be_within(0.01).of(distance) }
 
             expect(cars.map(&:distance))
               .to match(expected)
@@ -58,7 +59,7 @@ module CarsApi
 
             cars = store.get_closest(location, 10, :kms)
             expected = [6.18, 6.98]
-                       .map { |x| be_within(0.01).of(x) }
+                       .map { |distance| be_within(0.01).of(distance) }
 
             expect(cars.map(&:distance))
               .to match(expected)
@@ -69,7 +70,7 @@ module CarsApi
 
             cars = store.get_closest(location, 10, :miles)
             expected = [3.84, 4.34]
-                       .map { |x| be_within(0.01).of(x) }
+                       .map { |distance| be_within(0.01).of(distance) }
 
             expect(cars.map(&:distance))
               .to match(expected)

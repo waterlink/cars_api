@@ -1,5 +1,6 @@
 require "cars_api/get_closest_cars/interactor"
 require "cars_api/in_memory/car_store"
+require "cars_api/location"
 
 module CarsApi
   module GetClosestCars
@@ -58,7 +59,7 @@ module CarsApi
         response = interactor.call(request)
 
         expected = [24.45, 31.14]
-                   .map { |x| be_within(0.01).of(x) }
+                   .map { |distance| be_within(0.01).of(distance) }
         expect(response.cars.map(&:distance))
           .to match(expected)
 
@@ -66,7 +67,7 @@ module CarsApi
         response = interactor.call(request)
 
         expected = [24.45, 31.14]
-                   .map { |x| be_within(0.01).of(x) }
+                   .map { |distance| be_within(0.01).of(distance) }
         expect(response.cars.map(&:distance))
           .to match(expected)
       end
@@ -76,7 +77,7 @@ module CarsApi
         response = interactor.call(request)
 
         expected = [15.19, 19.35]
-                   .map { |x| be_within(0.01).of(x) }
+                   .map { |distance| be_within(0.01).of(distance) }
         expect(response.cars.map(&:distance))
           .to match(expected)
       end

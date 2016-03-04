@@ -10,22 +10,35 @@ module CarsApi
       end
 
       def call(request)
-        Response[
-          car_store.get_closest(
-            request.location,
-            request.n,
-            units(request.units)
-          )
-        ]
+        Response[Call.new(request, car_store).closest]
       end
 
       private
 
       attr_reader :car_store
 
-      def units(value)
-        return :kms unless value
-        value
+      # Call represents one specific interactor action
+      class Call
+        def initialize(request, car_store)
+          @location = request.location
+          @limit = request.n
+          @units = self.class.units_from(request.units)
+
+          @car_store = car_store
+        end
+
+        def self.units_from(value)
+          return :kms unless value
+          value
+        end
+
+        def closest
+          car_store.get_closest(location, limit, units)
+        end
+
+        private
+
+        attr_reader :location, :limit, :units, :car_store
       end
     end
   end

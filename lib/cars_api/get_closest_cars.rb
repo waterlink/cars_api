@@ -2,7 +2,10 @@ require "cars_api"
 
 module CarsApi
   module GetClosestCars
+    # Request represents GetClosestCars use case input data
     Request = Struct.new(:location, :n, :units)
+
+    # Response represents GetClosestCars use case output data
     Response = Struct.new(:cars)
 
     # Describes protocol for CarStore required by GetClosestCars

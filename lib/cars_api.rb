@@ -1,7 +1,6 @@
 require "cars_api/version"
 
 module CarsApi
-  Location = Struct.new(:latitude, :longitude)
+  # Car represents a concrete carsharing proposition
   Car = Struct.new(:description, :location)
-  CarMarker = Struct.new(:car, :distance)
 end
