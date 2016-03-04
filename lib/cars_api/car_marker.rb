@@ -3,7 +3,8 @@ require "cars_api"
 module CarsApi
   # CarMarker represents a concrete carsharing proposition
   # with a walking distance
-  CarMarker = Struct.new(:car, :distance) do
+  CarMarker = Struct.new(:car, :distance)
+  class CarMarker
     def self.from(location, car, units)
       new(
         car,

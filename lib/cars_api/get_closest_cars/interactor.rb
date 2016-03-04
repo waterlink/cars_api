@@ -10,7 +10,9 @@ module CarsApi
       end
 
       def call(request)
-        Response[Call.new(request, car_store).closest]
+        Response[
+          Call.new(request, car_store).closest
+        ]
       end
 
       private
@@ -22,14 +24,9 @@ module CarsApi
         def initialize(request, car_store)
           @location = request.location
           @limit = request.n
-          @units = self.class.units_from(request.units)
+          @units = request.units
 
           @car_store = car_store
-        end
-
-        def self.units_from(value)
-          return :kms unless value
-          value
         end
 
         def closest
@@ -38,7 +35,11 @@ module CarsApi
 
         private
 
-        attr_reader :location, :limit, :units, :car_store
+        attr_reader :location, :limit, :car_store
+
+        def units
+          @units || :kms
+        end
       end
     end
   end
