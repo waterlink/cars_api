@@ -1,18 +1,18 @@
 require "cars_api/in_memory/car_store"
 require "cars_api/get_closest_cars"
+require "cars_api/initial_import"
 require "cars_api/location"
 
 module CarsApi
   module InMemory
     RSpec.describe CarStore do
+      let(:car_a) { Car["First", Location[51.511318, -0.318178]] }
+      let(:car_b) { Car["Second", Location[51.553667, -0.315159]] }
+      let(:car_c) { Car["Third", Location[51.512107, -0.313599]] }
+
       describe GetClosestCars::CarStoreProtocol do
         describe "#get_closest(location, limit)" do
           let(:location) { Location[51.5444204, -0.22707] }
-
-          let(:car_a) { Car["First", Location[51.511318, -0.318178]] }
-          let(:car_b) { Car["Second", Location[51.553667, -0.315159]] }
-          let(:car_c) { Car["Third", Location[51.512107, -0.313599]] }
-
           it "returns empty when no data" do
             cars = CarStore
                    .new
@@ -96,6 +96,30 @@ module CarsApi
               .get_closest(location, 2)
               .map(&:car))
               .to eq([car_b, car_c])
+          end
+        end
+      end
+
+      describe InitialImport::CarStoreProtocol do
+        describe "#clear" do
+          it "clears data from the car store" do
+            store = CarStore.new([car_a, car_b])
+            store.clear
+            expect(store).to eq(CarStore.new([]))
+          end
+        end
+
+        describe "#save" do
+          it "stores car data in the car store" do
+            store = CarStore.new([])
+
+            store.save(car_b)
+            expect(store).to eq(CarStore.new([car_b]))
+
+            store.save(car_a)
+            expect(store).to eq(
+              CarStore.new([car_b, car_a])
+            )
           end
         end
       end

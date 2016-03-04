@@ -15,7 +15,21 @@ module CarsApi
           .call(limit)
       end
 
-      private
+      def clear
+        @data = []
+      end
+
+      def save(car)
+        @data << car
+      end
+
+      # suppress :reek:FeatureEnvy
+      def ==(other)
+        return false unless other.is_a?(CarStore)
+        data == other.data
+      end
+
+      protected
 
       attr_reader :data
 
