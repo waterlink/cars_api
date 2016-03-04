@@ -39,7 +39,7 @@ module CarsApi
 
         def car_markers
           data.map do |car|
-            CarMarker.from(location, car, units)
+            CarMarkerFactory.from(location, car, units)
           end
         end
       end
