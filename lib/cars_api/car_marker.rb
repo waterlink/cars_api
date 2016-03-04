@@ -4,9 +4,11 @@ module CarsApi
   # CarMarker represents a concrete carsharing proposition
   # with a walking distance
   CarMarker = Struct.new(:car, :distance)
-  class CarMarker
+
+  # CarMarkerFactory is a simple factory for CarMarkerValue
+  module CarMarkerFactory
     def self.from(location, car, units)
-      new(
+      CarMarker.new(
         car,
         location.distance_to(car.location, units)
       )

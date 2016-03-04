@@ -2,12 +2,14 @@ require "cars_api"
 require "geokit"
 
 module CarsApi
-  # Location represents a position on the map
-  Location = Struct.new(:latitude, :longitude)
-  class Location
+  # LocationValue represents a position on the map
+  LocationValue = Struct.new(:latitude, :longitude)
+
+  # Location represents a position on the map with required behavior
+  class Location < LocationValue
     def distance_to(other, units)
       GEOCALC.distance_between(
-        self.to_a,
+        to_a,
         other.to_a,
         units: units
       )
