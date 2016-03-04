@@ -20,3 +20,4 @@ before_install:
 script:
   - rake
   - rubocop
+  - reek
