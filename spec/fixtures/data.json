@@ -1,0 +1,18 @@
+{
+  "locations": [
+    {
+      "latitude": "12.34",
+      "description": "Car a",
+      "locationId": "899",
+      "longitude": "56.78"
+    },
+    {
+      "latitude": "23.45",
+      "hasVans": "1",
+      "description": "Car b",
+      "locationId": "901",
+      "longitude": "45.67"
+    }
+  ]
+}
+
