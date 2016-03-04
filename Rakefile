@@ -12,7 +12,12 @@ end
 begin
   require "flog_task"
 
-  FlogTask.new(name = :flog, threshold = 10, dirs = ["lib"], method = :max_method)
+  FlogTask.new(
+    _name = :flog,
+    _threshold = 10,
+    _dirs = ["lib"],
+    _method = :max_method
+  )
 rescue LoadError
   puts "Unable to load Flog rake task"
 end
