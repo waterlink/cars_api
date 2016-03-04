@@ -21,3 +21,4 @@ script:
   - rake
   - rubocop
   - reek
+  - rake -t flog
