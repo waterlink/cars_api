@@ -11,4 +11,5 @@ group :development do
   gem "rubocop"
   gem "reek"
   gem "flog"
+  gem "flay"
 end

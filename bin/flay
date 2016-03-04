@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+flay --mass 7 lib
