@@ -38,4 +38,7 @@ Gem::Specification.new do |spec|
   # This is used only in InMemory implementations and in integration tests to
   # verify that real implementations return sane values.
   spec.add_dependency "geokit", "~> 1.10"
+
+  # This is used for a nice DSL for command line application.
+  spec.add_dependency "thor", "~> 0.19"
 end

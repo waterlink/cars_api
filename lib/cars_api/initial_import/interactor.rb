@@ -1,5 +1,6 @@
 require "cars_api/initial_import"
 require "cars_api/result"
+require "cars_api/location"
 
 module CarsApi
   module InitialImport
