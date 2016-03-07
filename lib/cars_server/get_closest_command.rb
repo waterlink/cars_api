@@ -1,14 +1,8 @@
 require "cars_server"
+require "cars_server/closest_cars_view"
 require "cars_api/get_closest_cars"
 
 module CarsServer
-  # ClosestCarsViewStruct is a value object for ClosestCars view
-  ClosestCarsViewStruct = Struct.new(:cars)
-
-  # ClosestCarsView is an API view for GetClosestCars use case
-  class ClosestCarsView < ClosestCarsViewStruct
-  end
-
   # GetClosestCommand is a command to work with GetClosestCars interactor
   class GetClosestCommand
     UNITS = {
