@@ -1,7 +1,10 @@
 require "cars_cli/import_command"
+require "cars_api/dummy_interactor"
 
 module CarsCli
   RSpec.describe ImportCommand do
+    let(:dummy) { CarsApi::DummyInteractor }
+
     let(:car_a) do
       {
         description: "Car a",
@@ -27,7 +30,7 @@ module CarsCli
     end
 
     it "requests interactor with empty datastore" do
-      interactor = DummyInteractor.new.with_response(success)
+      interactor = dummy.new.with_response(success)
       command = ImportCommand.new(
         interactor,
         "./spec/fixtures/empty.json"
@@ -45,7 +48,7 @@ module CarsCli
     end
 
     it "requests interactor with some datastore" do
-      interactor = DummyInteractor.new.with_response(success)
+      interactor = dummy.new.with_response(success)
       command = ImportCommand.new(
         interactor,
         "./spec/fixtures/data.json"
@@ -63,7 +66,7 @@ module CarsCli
     end
 
     it "returns a success view, when successful" do
-      interactor = DummyInteractor.new.with_response(success)
+      interactor = dummy.new.with_response(success)
       command = ImportCommand.new(
         interactor,
         "./spec/fixtures/data.json"
@@ -73,7 +76,7 @@ module CarsCli
     end
 
     it "returns a failure view, when failure" do
-      interactor = DummyInteractor.new.with_response(failure)
+      interactor = dummy.new.with_response(failure)
       command = ImportCommand.new(
         interactor,
         "./spec/fixtures/data.json"
