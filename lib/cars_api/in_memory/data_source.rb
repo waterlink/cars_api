@@ -1,3 +1,5 @@
+require "cars_api/in_memory"
+
 module CarsApi
   module InMemory
     # DataSource is an implementation of InitialImport::DataSourceProtocol

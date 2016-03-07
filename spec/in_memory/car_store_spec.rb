@@ -2,6 +2,7 @@ require "cars_api/in_memory/car_store"
 require "cars_api/get_closest_cars"
 require "cars_api/initial_import"
 require "cars_api/location"
+require "cars_api/result"
 
 module CarsApi
   # rubocop:disable Metrics/ModuleLength
