@@ -1,5 +1,6 @@
 require "cars_api/initial_import/interactor"
-require "cars_api/in_memory"
+require "cars_api/in_memory/data_source"
+require "cars_api/in_memory/car_store"
 
 module CarsApi
   module InitialImport

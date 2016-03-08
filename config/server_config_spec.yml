@@ -1,0 +1,5 @@
+---
+:server: :server_type
+:port: :server_port
+:bind: :server_bind
+:interactor_get_closest: :interactor_get_closest

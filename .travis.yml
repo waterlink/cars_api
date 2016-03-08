@@ -14,6 +14,8 @@ matrix:
     # and jruby for 2.2
     - rvm: jruby-9000
 
+bundler_args: --without default_server
+
 before_install:
   - gem install bundler
 
