@@ -41,4 +41,8 @@ Gem::Specification.new do |spec|
 
   # This is used for a nice DSL for command line application.
   spec.add_dependency "thor", "~> 0.19"
+
+  # This is used for a web API server
+  spec.add_dependency "thin", "~> 1.6"
+  spec.add_dependency "sinatra", "~> 1.4"
 end
