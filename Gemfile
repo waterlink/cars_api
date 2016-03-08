@@ -13,3 +13,7 @@ group :development do
   gem "flog"
   gem "flay"
 end
+
+group :default_server do
+  gem "thin"
+end
