@@ -1,6 +1,7 @@
 require "cars_server"
 require "cars_server/closest_cars_view"
 require "cars_api/get_closest_cars"
+require "cars_util/simple_hash_builder"
 
 module CarsServer
   # GetClosestCommand is a command to work with GetClosestCars interactor
@@ -50,6 +51,11 @@ module CarsServer
 
     # Presenter understands rendering process of car markers
     class Presenter
+      PRESENTER_SPEC = CarsUtil::SimpleHashBuilder
+                       .load_spec("car_marker_presenter_spec")
+
+      include CarsUtil::SimpleHashBuilder
+
       def initialize(car_marker, units)
         @car_marker = car_marker
         @units = units
@@ -60,12 +66,7 @@ module CarsServer
       end
 
       def present
-        {
-          description: description,
-          latitude: latitude,
-          longitude: longitude,
-          distance: distance
-        }
+        build_hash_with(PRESENTER_SPEC)
       end
 
       private
@@ -93,7 +94,11 @@ module CarsServer
       end
 
       def distance
-        "#{car_marker.distance} #{units}"
+        "#{presented_distance} #{units}"
+      end
+
+      def presented_distance
+        format("%.2g", car_marker.distance)
       end
     end
   end
