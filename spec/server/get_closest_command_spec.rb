@@ -40,7 +40,7 @@ module CarsServer
         description: "car a",
         latitude: 12.67,
         longitude: 13.84,
-        distance: "9 #{proper_units}"
+        distance: "9.0 #{proper_units}"
       }
     end
 
@@ -49,7 +49,7 @@ module CarsServer
         description: "car b",
         latitude: 12.5,
         longitude: 13.72,
-        distance: "19 #{proper_units}"
+        distance: "19.0 #{proper_units}"
       }
     end
 
@@ -105,7 +105,7 @@ module CarsServer
       let(:units) { "kms" }
 
       it "returns a correct response with kms in distance" do
-        expect(view.cars[0][:distance]).to eq("9 kms")
+        expect(view.cars[0][:distance]).to eq("9.0 kms")
       end
     end
 
@@ -113,7 +113,7 @@ module CarsServer
       let(:units) { "miles" }
 
       it "returns a correct response with miles in distance" do
-        expect(view.cars[0][:distance]).to eq("9 miles")
+        expect(view.cars[0][:distance]).to eq("9.0 miles")
       end
 
       it "passes a correct request to the interactor" do
@@ -130,7 +130,7 @@ module CarsServer
       let(:units) { "something else" }
 
       it "returns a correct response with kms in distance" do
-        expect(view.cars[0][:distance]).to eq("9 kms")
+        expect(view.cars[0][:distance]).to eq("9.0 kms")
       end
     end
   end

@@ -22,7 +22,7 @@ module CarsServer
           description: "car b",
           latitude: 12.39,
           longitude: 14.87,
-          distance: "31 kms"
+          distance: "30.5 kms"
         }
       ]
     end
@@ -33,14 +33,14 @@ module CarsServer
           description: "car a",
           latitude: 12.44,
           longitude: 14.57,
-          distance: "5 miles"
+          distance: "5.0 miles"
         },
 
         {
           description: "car b",
           latitude: 12.39,
           longitude: 14.87,
-          distance: "19 miles"
+          distance: "19.0 miles"
         }
       ]
     end

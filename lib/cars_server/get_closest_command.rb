@@ -98,7 +98,7 @@ module CarsServer
       end
 
       def presented_distance
-        format("%.2g", car_marker.distance)
+        format("%.1f", car_marker.distance)
       end
     end
   end
