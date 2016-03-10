@@ -44,4 +44,7 @@ Gem::Specification.new do |spec|
 
   # This is used for a web API server
   spec.add_dependency "sinatra", "~> 1.4"
+
+  # This is a crate.io client
+  spec.add_dependency "crate_ruby"
 end

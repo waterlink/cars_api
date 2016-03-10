@@ -2,6 +2,7 @@ require "cars_server/get_closest_command"
 require "cars_api/dummy_interactor"
 require "cars_api/get_closest_cars"
 require "cars_api/location"
+require "cars_api/result"
 require "cars_api/car_marker"
 
 # rubocop:disable Metrics/ModuleLength
@@ -55,7 +56,9 @@ module CarsServer
 
     let(:interactor) do
       dummy.new.with_response(
-        CarsApi::GetClosestCars::Response[[marker_a, marker_b]]
+        CarsApi::GetClosestCars::Response[
+          CarsApi::Result.ok([marker_a, marker_b])
+        ]
       )
     end
 
@@ -67,7 +70,9 @@ module CarsServer
 
     it "returns empty response when there is no data" do
       interactor = dummy.new.with_response(
-        CarsApi::GetClosestCars::Response[[]]
+        CarsApi::GetClosestCars::Response[
+          CarsApi::Result.ok([])
+        ]
       )
       command = GetClosestCommand.new(interactor, location, limit, nil)
 
@@ -77,6 +82,18 @@ module CarsServer
 
     it "returns a correct response when there is some data" do
       expect(view).to eq(ClosestCarsView[[raw_a, raw_b]])
+    end
+
+    it "returns InternalError view when failed response" do
+      interactor = dummy.new.with_response(
+        CarsApi::GetClosestCars::Response[
+          CarsApi::Result.error("Connection refused")
+        ]
+      )
+      command = GetClosestCommand.new(interactor, location, limit, nil)
+
+      view = command.call
+      expect(view).to eq(InternalError["Connection refused"])
     end
 
     it "passes a correct request to the interactor" do

@@ -73,5 +73,12 @@ module CarsApi
       expect { Result.error("oops").unwrap! }
         .to raise_error(ArgumentError, "Error(\"oops\") is not Ok.")
     end
+
+    it "is possible to create result from block that raises" do
+      expect(Result.do { 42 }).to eq(Result.ok(42))
+
+      expect(Result.do { raise "oops" })
+        .to eq(Result.error("oops"))
+    end
   end
 end

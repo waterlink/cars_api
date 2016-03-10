@@ -38,14 +38,14 @@ module CarsApi
         location = Location[12.55, 13.53]
 
         store = CarStore.new(no_such_file)
-        expect(store.get_closest(location, 10).count).to eq(0)
+        expect(store.get_closest(location, 10).unwrap!.count).to eq(0)
 
         File.write(
           no_such_file,
           File.read(fixture_path_for("couple_of_cars"))
         )
 
-        expect(store.get_closest(location, 10).count).to eq(2)
+        expect(store.get_closest(location, 10).unwrap!.count).to eq(2)
       end
 
       before do

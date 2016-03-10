@@ -14,6 +14,12 @@ module CarsApi
       From::ERROR.call(message, &blk)
     end
 
+    def self.do
+      Result.ok(yield)
+    rescue => error
+      Result.error(error.message)
+    end
+
     def self.ok(value)
       Ok[value]
     end

@@ -12,9 +12,11 @@ module CarsApi
         end
 
         def call(limit)
-          car_markers
-            .sort_by(&:distance)
-            .first(limit)
+          Result.ok(
+            car_markers
+              .sort_by(&:distance)
+              .first(limit)
+          )
         end
 
         private

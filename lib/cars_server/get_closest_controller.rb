@@ -1,6 +1,7 @@
 require "cars_server/location_parser"
 require "cars_server/limit_parser"
 require "cars_server/get_closest_command"
+require "cars_server/client_error"
 
 module CarsServer
   # GetClosestController understands input and output format of the
@@ -12,7 +13,7 @@ module CarsServer
     end
 
     def render
-      view.to_json
+      [view.status, {}, view.to_json]
     end
 
     private
@@ -21,7 +22,7 @@ module CarsServer
 
     def view
       call_command
-        .when_error(&handle_error)
+        .when_error { |message| ClientError[message] }
         .unwrap!
     end
 
@@ -44,14 +45,6 @@ module CarsServer
 
     def build_command
       location.when_ok(&command)
-    end
-
-    def _handle_error(message)
-      { error: message }
-    end
-
-    def handle_error
-      method(:_handle_error)
     end
 
     def location
