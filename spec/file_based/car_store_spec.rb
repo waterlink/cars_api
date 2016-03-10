@@ -1,3 +1,5 @@
+require "tempfile"
+
 require "shared_examples/car_store"
 
 require "cars_api"
