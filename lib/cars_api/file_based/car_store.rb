@@ -15,6 +15,7 @@ module CarsApi
 
       def initialize(path)
         @path = path
+        clear unless File.exist?(path)
         reload
       end
 

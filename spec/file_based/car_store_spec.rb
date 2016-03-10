@@ -23,9 +23,14 @@ module CarsApi
       subject(:car_b_added) { fixture("car_b_added") }
       subject(:and_car_a_added) { fixture("and_car_a_added") }
 
+      let(:tempfiles) { [] }
+
       it_behaves_like "CarStore"
 
-      let(:tempfiles) { [] }
+      it "is empty when file is missing" do
+        store = CarStore.new("./spec/tmp/no-such-file.json")
+        expect(store).to eq(empty)
+      end
 
       after do
         tempfiles.each(&:unlink)

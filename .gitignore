@@ -10,3 +10,5 @@
 
 /.spec_examples.txt
 /.watch.out
+
+/spec/tmp/
