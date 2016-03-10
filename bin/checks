@@ -2,6 +2,8 @@
 
 set -e
 
+RSPEC_OPTS=${RSPEC_OPTS:-"--tag=~crate_io"}
+
 rspec $RSPEC_OPTS
 rubocop
 reek

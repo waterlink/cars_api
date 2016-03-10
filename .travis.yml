@@ -2,9 +2,6 @@ language: ruby
 
 dist: trusty
 
-env:
-  - RSPEC_OPTS="--tag=~crate_io"
-
 matrix:
   include:
     - rvm: jruby-1.7.22  # jruby 2.0 mode
@@ -21,7 +18,7 @@ matrix:
       before_script:
         - bin/docker-launch-crate-io
       env:
-        - RSPEC_OPTS=""
+        - RSPEC_OPTS="--tag=crate_io"
 
     # normal MRI builds
     - rvm: 2.0
