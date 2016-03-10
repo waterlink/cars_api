@@ -1,0 +1,25 @@
+[
+  {
+    "description": "First",
+    "location": {
+      "latitude": 51.511318,
+      "longitude": -0.318178
+    }
+  },
+
+  {
+    "description": "Second",
+    "location": {
+      "latitude": 51.553667,
+      "longitude": -0.315159
+    }
+  },
+
+  {
+    "description": "Third",
+    "location": {
+      "latitude": 51.512107,
+      "longitude": -0.313599
+    }
+  }
+]

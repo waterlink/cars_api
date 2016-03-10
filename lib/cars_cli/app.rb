@@ -5,8 +5,10 @@ require "cars_cli"
 require "cars_cli/import_command"
 
 require "cars_api/initial_import/interactor"
-require "cars_api/in_memory/car_store"
 require "cars_api/get_closest_cars/interactor"
+
+require "cars_api/in_memory/car_store"
+require "cars_api/file_based/car_store"
 
 require "cars_server/app"
 
@@ -14,6 +16,67 @@ require "cars_util/simple_hash_builder"
 
 # CarsCli is a CLI representation layer for CarsApi
 module CarsCli
+  # CarStoreOptions knows about different CarStore implementations
+  module CarStoreOptions
+    # InMemoryCarStore knows how to build an in-memory CarStore
+    class InMemoryCarStore
+      def self.build(_options)
+        CarsApi::InMemory::CarStore.new(
+          [
+            CarsApi::Car["the car 1", CarsApi::Location[12.79, 13.54]],
+            CarsApi::Car["the car 2", CarsApi::Location[12.98, 13.44]]
+          ]
+        )
+      end
+    end
+
+    # FileBasedCarStore knows how to build a file-based CarStore
+    class FileBasedCarStore
+      def self.build(options)
+        CarsApi::FileBased::CarStore.new(options[:file_based_path])
+      end
+    end
+
+    CAR_STORE_ADAPTERS = {
+      "in-memory" => InMemoryCarStore,
+      "file-based" => FileBasedCarStore
+    }.freeze
+
+    DEFAULT_CAR_STORE = "file-based".freeze
+    DEFAULT_FILE_BASED_PATH = "./car_store.json".freeze
+
+    # rubocop:disable Metrics/MethodLength
+    def self.included(base)
+      super
+
+      base.class_option(
+        :car_store,
+        default: DEFAULT_CAR_STORE,
+        type: :string,
+        enum: CAR_STORE_ADAPTERS.keys,
+        desc: "CarStore adapter to use"
+      )
+
+      base.class_option(
+        :file_based_path,
+        default: DEFAULT_FILE_BASED_PATH,
+        type: :string,
+        desc: "File based CarStore file path"
+      )
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    private
+
+    def car_store
+      @_car_store ||= car_store_factory.build(options)
+    end
+
+    def car_store_factory
+      CAR_STORE_ADAPTERS.fetch(options[:car_store])
+    end
+  end
+
   # App is a CLI application for CarsApi
   class App < Thor
     SERVER_CONFIG_SPEC = CarsUtil::SimpleHashBuilder
@@ -21,12 +84,13 @@ module CarsCli
 
     include CarsUtil::SimpleHashBuilder
 
+    include CarStoreOptions
+
     desc "import FILE", "Import car locations from JSON file"
     def import(file)
       command = CarsCli::ImportCommand.new(interactor_initial_import, file)
       view = command.call
       puts view.to_s
-      p car_store
     end
 
     desc "server", "Start API server"
@@ -98,15 +162,6 @@ module CarsCli
 
     def server_library
       options[:server_require] || options[:server]
-    end
-
-    def car_store
-      @_car_store ||= CarsApi::InMemory::CarStore.new(
-        [
-          CarsApi::Car["the car 1", CarsApi::Location[12.79, 13.54]],
-          CarsApi::Car["the car 2", CarsApi::Location[12.98, 13.44]]
-        ]
-      )
     end
 
     def interactor_initial_import
