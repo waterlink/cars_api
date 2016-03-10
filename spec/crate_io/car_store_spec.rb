@@ -10,7 +10,7 @@ require "cars_api/crate_io/car_store"
 module CarsApi
   # suppress :reek:IrresponsibleModule
   module CrateIO
-    RSpec.describe CarStore do
+    RSpec.describe CarStore, :crate_io do
       let(:car_a) { Car["First", Location[51.511318, -0.318178]] }
       let(:car_b) { Car["Second", Location[51.553667, -0.315159]] }
       let(:car_c) { Car["Third", Location[51.512107, -0.313599]] }
