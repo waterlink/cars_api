@@ -2,7 +2,7 @@ require "json"
 
 RSpec.describe "System tests" do
   describe "/cars API endpoint" do
-    let!(:pipe) { open("|cars_api server") }
+    let!(:pipe) { open("|cars_api server --server=webrick") }
 
     after do
       Process.kill("INT", pipe.pid)
