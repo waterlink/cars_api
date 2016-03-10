@@ -18,7 +18,7 @@ require "cars_util/simple_hash_builder"
 module CarsCli
   # CarStoreOptions knows about different CarStore implementations
   module CarStoreOptions
-    # :nodoc:
+    # InMemoryCarStore knows how to build an in-memory CarStore
     class InMemoryCarStore
       def self.build(_options)
         CarsApi::InMemory::CarStore.new(
@@ -30,7 +30,7 @@ module CarsCli
       end
     end
 
-    # :nodoc:
+    # FileBasedCarStore knows how to build a file-based CarStore
     class FileBasedCarStore
       def self.build(options)
         CarsApi::FileBased::CarStore.new(options[:file_based_path])
@@ -42,6 +42,7 @@ module CarsCli
       "file-based" => FileBasedCarStore
     }.freeze
 
+    # rubocop:disable Metrics/MethodLength
     def self.included(base)
       super
 
@@ -60,6 +61,7 @@ module CarsCli
         desc: "File based CarStore file path"
       )
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 
