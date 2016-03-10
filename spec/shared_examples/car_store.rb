@@ -11,6 +11,7 @@ module CarsApi
         it "returns empty when no data" do
           cars = empty
                  .get_closest(location, 10)
+                 .unwrap!
                  .map(&:car)
           expect(cars).to eq([])
         end
@@ -18,29 +19,29 @@ module CarsApi
         it "returns exactly limit cars" do
           store = some_cars
 
-          cars = store.get_closest(location, 0)
+          cars = store.get_closest(location, 0).unwrap!
           expect(cars.map(&:car)).to eq([])
 
-          cars = store.get_closest(location, 1)
+          cars = store.get_closest(location, 1).unwrap!
           expect(cars.map(&:car)).to eq([car_b])
 
-          cars = store.get_closest(location, 2)
+          cars = store.get_closest(location, 2).unwrap!
           expect(cars.map(&:car)).to eq([car_b, car_c])
 
-          cars = store.get_closest(location, 3)
+          cars = store.get_closest(location, 3).unwrap!
           expect(cars.map(&:car)).to eq([car_b, car_c, car_a])
         end
 
         it "returns as much as it has when limit is big" do
           store = two_cars
-          cars = store.get_closest(location, 10)
+          cars = store.get_closest(location, 10).unwrap!
           expect(cars.map(&:car)).to eq([car_b, car_c])
         end
 
         it "returns correct distances" do
           store = two_cars
 
-          cars = store.get_closest(location, 10)
+          cars = store.get_closest(location, 10).unwrap!
           expected = [6.18, 6.98]
                      .map { |distance| be_within(0.01).of(distance) }
 
@@ -51,7 +52,7 @@ module CarsApi
         it "returns distances in kms" do
           store = two_cars
 
-          cars = store.get_closest(location, 10, :kms)
+          cars = store.get_closest(location, 10, :kms).unwrap!
           expected = [6.18, 6.98]
                      .map { |distance| be_within(0.01).of(distance) }
 
@@ -62,7 +63,7 @@ module CarsApi
         it "returns distances in miles" do
           store = two_cars
 
-          cars = store.get_closest(location, 10, :miles)
+          cars = store.get_closest(location, 10, :miles).unwrap!
           expected = [3.84, 4.34]
                      .map { |distance| be_within(0.01).of(distance) }
 
@@ -73,11 +74,13 @@ module CarsApi
         it "orders car markers by distance" do
           expect(some_cars
             .get_closest(location, 10)
+            .unwrap!
             .map(&:car))
             .to eq([car_b, car_c, car_a])
 
           expect(other_cars
             .get_closest(location, 10)
+            .unwrap!
             .map(&:car))
             .to eq([car_b, car_c, car_a])
         end
@@ -85,6 +88,7 @@ module CarsApi
         it "picks best limit cars by distance" do
           expect(some_cars
             .get_closest(location, 2)
+            .unwrap!
             .map(&:car))
             .to eq([car_b, car_c])
         end

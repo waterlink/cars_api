@@ -43,5 +43,9 @@ module CarsServer
         }.to_json
       )
     end
+
+    it "has status code 200" do
+      expect(view.status).to eq(200)
+    end
   end
 end

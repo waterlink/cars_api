@@ -27,7 +27,7 @@ module CarsApi
 
         response = interactor.call(request)
 
-        expect(response).to eq(Response[[]])
+        expect(response).to eq(Response[Result.ok([])])
       end
 
       it "returns an empty response when there are no cars" do
@@ -37,19 +37,19 @@ module CarsApi
 
         response = interactor.call(request)
 
-        expect(response).to eq(Response[[]])
+        expect(response).to eq(Response[Result.ok([])])
       end
 
       it "returns response with cars when there are some cars" do
         request = Request[location, 10]
         response = interactor.call(request)
-        expect(response.cars.map(&:car)).to eq(
+        expect(response.result.unwrap!.map(&:car)).to eq(
           [car_1, car_3, car_2, car_4]
         )
 
         request = Request[location, 2]
         response = interactor.call(request)
-        expect(response.cars.map(&:car)).to eq(
+        expect(response.result.unwrap!.map(&:car)).to eq(
           [car_1, car_3]
         )
       end
@@ -60,7 +60,7 @@ module CarsApi
 
         expected = [24.45, 31.14]
                    .map { |distance| be_within(0.01).of(distance) }
-        expect(response.cars.map(&:distance))
+        expect(response.result.unwrap!.map(&:distance))
           .to match(expected)
 
         request = Request[location, 2, :kms]
@@ -68,7 +68,7 @@ module CarsApi
 
         expected = [24.45, 31.14]
                    .map { |distance| be_within(0.01).of(distance) }
-        expect(response.cars.map(&:distance))
+        expect(response.result.unwrap!.map(&:distance))
           .to match(expected)
       end
 
@@ -78,7 +78,7 @@ module CarsApi
 
         expected = [15.19, 19.35]
                    .map { |distance| be_within(0.01).of(distance) }
-        expect(response.cars.map(&:distance))
+        expect(response.result.unwrap!.map(&:distance))
           .to match(expected)
       end
     end

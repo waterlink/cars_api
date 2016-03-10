@@ -2,6 +2,7 @@ require "json"
 
 require "cars_api/file_based"
 require "cars_api/result"
+require "cars_api/car_builder"
 require "cars_api/in_memory/car_store/closest_query"
 
 require "cars_util/simple_hash_builder"
@@ -106,41 +107,6 @@ module CarsApi
 
         def car_location
           @_car_location ||= car.location
-        end
-      end
-
-      # CarBuilder undestands stored car format
-      class CarBuilder
-        def initialize(raw_car)
-          @raw_car = raw_car
-        end
-
-        def self.build(raw_car)
-          new(raw_car).build_car
-        end
-
-        def build_car
-          Car[description, Location[latitude, longitude]]
-        end
-
-        private
-
-        attr_reader :raw_car
-
-        def description
-          raw_car["description"]
-        end
-
-        def latitude
-          location["latitude"]
-        end
-
-        def longitude
-          location["longitude"]
-        end
-
-        def location
-          @_location ||= raw_car["location"]
         end
       end
     end

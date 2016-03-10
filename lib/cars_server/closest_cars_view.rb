@@ -11,6 +11,10 @@ module CarsServer
       @_to_json ||= with_root_object.to_json
     end
 
+    def status
+      200
+    end
+
     private
 
     def with_root_object

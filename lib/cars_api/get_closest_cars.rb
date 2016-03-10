@@ -6,7 +6,7 @@ module CarsApi
     Request = Struct.new(:location, :n, :units)
 
     # Response represents GetClosestCars use case output data
-    Response = Struct.new(:cars)
+    Response = Struct.new(:result)
 
     # Describes protocol for CarStore required by GetClosestCars
     class CarStoreProtocol

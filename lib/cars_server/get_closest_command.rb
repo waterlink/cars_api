@@ -1,5 +1,6 @@
 require "cars_server"
 require "cars_server/closest_cars_view"
+require "cars_server/internal_error"
 require "cars_api/get_closest_cars"
 require "cars_util/simple_hash_builder"
 
@@ -20,23 +21,24 @@ module CarsServer
     end
 
     def call
-      ClosestCarsView[raw_cars]
+      raw_cars
+        .when_ok { |cars| ClosestCarsView[cars] }
+        .when_error { |message| InternalError[message] }
+        .unwrap!
     end
 
     private
 
     attr_reader :interactor, :location, :limit, :units
 
-    def cars
-      response.cars
-    end
-
-    def presenters
-      cars.map { |car_marker| Presenter[car_marker, units] }
+    def result
+      response.result
     end
 
     def raw_cars
-      presenters.map(&:present)
+      result.when_ok do |cars|
+        Presenter.present_all(cars, units)
+      end
     end
 
     def response
@@ -63,6 +65,11 @@ module CarsServer
 
       def self.[](*args, &blk)
         new(*args, &blk)
+      end
+
+      def self.present_all(cars, units)
+        cars
+          .map { |car| new(car, units).present }
       end
 
       def present
