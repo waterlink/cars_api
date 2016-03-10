@@ -2,7 +2,7 @@
 
 set -e
 
-rake
+rspec $RSPEC_OPTS
 rubocop
 reek
 rake -t flog
