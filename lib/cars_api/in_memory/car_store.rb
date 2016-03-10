@@ -2,10 +2,14 @@ require "cars_api/in_memory"
 require "cars_api/in_memory/car_store/closest_query"
 require "cars_api/car_marker"
 
+require "cars_util/equality"
+
 module CarsApi
   module InMemory
     # job: InMemory::CarStore understands cars data.
     class CarStore
+      extend CarsUtil::Equality
+
       def initialize(data = [])
         @data = data
       end
@@ -26,11 +30,7 @@ module CarsApi
         Result.ok(nil)
       end
 
-      # suppress :reek:FeatureEnvy
-      def ==(other)
-        return false unless other.is_a?(CarStore)
-        data == other.data
-      end
+      def_equals [:data]
 
       protected
 

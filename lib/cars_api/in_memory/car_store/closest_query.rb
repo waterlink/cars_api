@@ -1,3 +1,5 @@
+require "cars_api/car_marker"
+
 module CarsApi
   module InMemory
     class CarStore
