@@ -5,8 +5,10 @@ require "cars_cli"
 require "cars_cli/import_command"
 
 require "cars_api/initial_import/interactor"
-require "cars_api/in_memory/car_store"
 require "cars_api/get_closest_cars/interactor"
+
+require "cars_api/in_memory/car_store"
+require "cars_api/file_based/car_store"
 
 require "cars_server/app"
 
@@ -14,12 +16,70 @@ require "cars_util/simple_hash_builder"
 
 # CarsCli is a CLI representation layer for CarsApi
 module CarsCli
+  # CarStoreOptions knows about different CarStore implementations
+  module CarStoreOptions
+    # :nodoc:
+    class InMemoryCarStore
+      def self.build(_options)
+        CarsApi::InMemory::CarStore.new(
+          [
+            CarsApi::Car["the car 1", CarsApi::Location[12.79, 13.54]],
+            CarsApi::Car["the car 2", CarsApi::Location[12.98, 13.44]]
+          ]
+        )
+      end
+    end
+
+    # :nodoc:
+    class FileBasedCarStore
+      def self.build(options)
+        CarsApi::FileBased::CarStore.new(options[:file_based_path])
+      end
+    end
+
+    CAR_STORE_ADAPTERS = {
+      "in-memory" => InMemoryCarStore,
+      "file-based" => FileBasedCarStore
+    }.freeze
+
+    def self.included(base)
+      super
+
+      base.class_option(
+        :car_store,
+        default: "in-memory",
+        type: :string,
+        enum: CAR_STORE_ADAPTERS.keys,
+        desc: "CarStore adapter to use"
+      )
+
+      base.class_option(
+        :file_based_path,
+        default: "./car_store.json",
+        type: :string,
+        desc: "File based CarStore file path"
+      )
+    end
+
+    private
+
+    def car_store
+      @_car_store ||= car_store_factory.build(options)
+    end
+
+    def car_store_factory
+      CAR_STORE_ADAPTERS.fetch(options[:car_store])
+    end
+  end
+
   # App is a CLI application for CarsApi
   class App < Thor
     SERVER_CONFIG_SPEC = CarsUtil::SimpleHashBuilder
                          .load_spec("server_config_spec")
 
     include CarsUtil::SimpleHashBuilder
+
+    include CarStoreOptions
 
     desc "import FILE", "Import car locations from JSON file"
     def import(file)
@@ -98,15 +158,6 @@ module CarsCli
 
     def server_library
       options[:server_require] || options[:server]
-    end
-
-    def car_store
-      @_car_store ||= CarsApi::InMemory::CarStore.new(
-        [
-          CarsApi::Car["the car 1", CarsApi::Location[12.79, 13.54]],
-          CarsApi::Car["the car 2", CarsApi::Location[12.98, 13.44]]
-        ]
-      )
     end
 
     def interactor_initial_import

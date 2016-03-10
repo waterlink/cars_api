@@ -12,3 +12,5 @@
 /.watch.out
 
 /spec/tmp/
+
+/car_store.json
