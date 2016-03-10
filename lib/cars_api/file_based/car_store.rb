@@ -20,6 +20,7 @@ module CarsApi
       end
 
       def get_closest(location, limit, units = :kms)
+        reload
         InMemory::CarStore::ClosestQuery
           .new(cars, location, units)
           .call(limit)
@@ -58,10 +59,6 @@ module CarsApi
       end
 
       def cars
-        @_cars ||= build_cars
-      end
-
-      def build_cars
         data.map { |raw| CarBuilder.build(raw) }
       end
 

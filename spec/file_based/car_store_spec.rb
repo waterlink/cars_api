@@ -32,22 +32,40 @@ module CarsApi
         expect(store).to eq(empty)
       end
 
+      it "reloads when file changes" do
+        location = Location[12.55, 13.53]
+
+        store = CarStore.new("./spec/tmp/no-such-file.json")
+        expect(store.get_closest(location, 10).count).to eq(0)
+
+        File.write(
+          "./spec/tmp/no-such-file.json",
+          File.read(fixture_path_for("couple_of_cars"))
+        )
+
+        expect(store.get_closest(location, 10).count).to eq(2)
+      end
+
       after do
         tempfiles.each(&:unlink)
+        File.delete("./spec/tmp/no-such-file.json") rescue nil
       end
 
       # suppress :reek:FeatureEnvy
       # suppress :reek:TooManyStatements
       def fixture(name)
-        fixture_path = "./spec/fixtures/car_store/#{name}.json"
-
         tempfile = Tempfile.new("car_store")
         tempfiles << tempfile
 
-        tempfile.write(File.read(fixture_path))
+        tempfile.write(File.read(fixture_path_for(name)))
         tempfile.close
 
         CarStore.new(tempfile.path)
+      end
+
+      # suppress :reek:FeatureEnvy
+      def fixture_path_for(name)
+        "./spec/fixtures/car_store/#{name}.json"
       end
     end
   end
