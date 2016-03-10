@@ -5,6 +5,6 @@ sudo docker run \
   -p 4200:4200 \
   -p 4300:4300 \
   -v /mnt/data/crate:/data \
-  -v ./config/crate.io.yml:/crate.yml \
+  -v $(pwd)/config/crate.io.yml:/crate.yml \
   crate \
   crate -Des.config=/crate.yml -Des.cluster.name=carsapi
