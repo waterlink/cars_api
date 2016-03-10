@@ -91,7 +91,6 @@ module CarsCli
       command = CarsCli::ImportCommand.new(interactor_initial_import, file)
       view = command.call
       puts view.to_s
-      p car_store
     end
 
     desc "server", "Start API server"
