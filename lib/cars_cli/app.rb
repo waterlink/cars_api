@@ -42,13 +42,16 @@ module CarsCli
       "file-based" => FileBasedCarStore
     }.freeze
 
+    DEFAULT_CAR_STORE = "file-based"
+    DEFAULT_FILE_BASED_PATH = "./car_store.json"
+
     # rubocop:disable Metrics/MethodLength
     def self.included(base)
       super
 
       base.class_option(
         :car_store,
-        default: "in-memory",
+        default: DEFAULT_CAR_STORE,
         type: :string,
         enum: CAR_STORE_ADAPTERS.keys,
         desc: "CarStore adapter to use"
@@ -56,7 +59,7 @@ module CarsCli
 
       base.class_option(
         :file_based_path,
-        default: "./car_store.json",
+        default: DEFAULT_FILE_BASED_PATH,
         type: :string,
         desc: "File based CarStore file path"
       )
