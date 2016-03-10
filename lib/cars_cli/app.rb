@@ -42,8 +42,8 @@ module CarsCli
       "file-based" => FileBasedCarStore
     }.freeze
 
-    DEFAULT_CAR_STORE = "file-based"
-    DEFAULT_FILE_BASED_PATH = "./car_store.json"
+    DEFAULT_CAR_STORE = "file-based".freeze
+    DEFAULT_FILE_BASED_PATH = "./car_store.json".freeze
 
     # rubocop:disable Metrics/MethodLength
     def self.included(base)
