@@ -1,8 +1,16 @@
 require "json"
 
-RSpec.describe "System tests" do
+RSpec.describe "System tests", :very_slow do
   describe "/cars API endpoint" do
-    let!(:pipe) { open("|bundle exec cars_api server --server=webrick") }
+    let(:port) { rand(50_000..55_000) }
+
+    let!(:pipe) do
+      open(
+        "|bundle exec cars_api server \
+            --server=webrick \
+            --server-port=#{port}"
+      )
+    end
 
     after do
       Process.kill("INT", pipe.pid)
@@ -27,7 +35,7 @@ RSpec.describe "System tests" do
     def fetch_data(retries = 30)
       raise "Unable to fetch data" if retries < 0
 
-      output = `curl localhost:4567/cars?location=45.67,23.37 2>/dev/null`
+      output = `curl localhost:#{port}/cars?location=45.67,23.37 2>/dev/null`
       begin
         JSON.parse(output)
       rescue
