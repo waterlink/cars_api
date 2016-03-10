@@ -8,3 +8,13 @@ sudo docker run \
   -v $(pwd)/config/crate.io.yml:/crate.yml \
   crate \
   crate -Des.config=/crate.yml -Des.cluster.name=carsapi
+
+retries=0
+max_retries=60
+while ! curl --fail localhost:4200; do
+  sleep 1
+  retries=$((retries + 1))
+  [[ $retries -gt $max_retries ]] && echo "Timeout on crate.io launch" && exit 1
+done
+
+echo "crate.io has launched successfully"
