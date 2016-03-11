@@ -9,6 +9,7 @@ require "cars_api/get_closest_cars/interactor"
 
 require "cars_api/in_memory/car_store"
 require "cars_api/file_based/car_store"
+require "cars_api/crate_io/car_store"
 
 require "cars_server/app"
 
@@ -37,34 +38,84 @@ module CarsCli
       end
     end
 
+    # CrateIOCarStore knows how to build a crate.io backed CarStore
+    class CrateIOCarStore
+      DEFAULT_HTTP_OPTIONS = {
+        read_timeout: 3600
+      }.freeze
+
+      def self.build(options)
+        new(options).build
+      end
+
+      def initialize(options)
+        @options = options
+      end
+
+      def build
+        CarsApi::CrateIO::CarStore.new(
+          options[:crate_io_car_table],
+          connection: connection
+        )
+      end
+
+      private
+
+      attr_reader :options
+
+      def connection
+        CrateRuby::Client.new(options[:crate_io_servers], http_options)
+      end
+
+      # TODO: see if support of some sort of auth is possible
+      # Most probably would require a PR to https://github.com/crate/crate_ruby/
+      def http_options
+        DEFAULT_HTTP_OPTIONS
+      end
+    end
+
     CAR_STORE_ADAPTERS = {
       "in-memory" => InMemoryCarStore,
-      "file-based" => FileBasedCarStore
+      "file-based" => FileBasedCarStore,
+      "crate-io" => CrateIOCarStore
     }.freeze
 
     DEFAULT_CAR_STORE = "file-based".freeze
     DEFAULT_FILE_BASED_PATH = "./car_store.json".freeze
+    DEFAULT_CRATE_IO_CAR_TABLE = "cars_api_development_cars".freeze
+    DEFAULT_CRATE_IO_SERVERS = ["localhost:4200"].freeze
 
-    # rubocop:disable Metrics/MethodLength
-    def self.included(base)
-      super
-
-      base.class_option(
-        :car_store,
+    CLASS_OPTIONS = {
+      car_store: {
         default: DEFAULT_CAR_STORE,
         type: :string,
         enum: CAR_STORE_ADAPTERS.keys,
         desc: "CarStore adapter to use"
-      )
+      },
 
-      base.class_option(
-        :file_based_path,
+      file_based_path: {
         default: DEFAULT_FILE_BASED_PATH,
         type: :string,
         desc: "File based CarStore file path"
-      )
+      },
+
+      crate_io_car_table: {
+        default: DEFAULT_CRATE_IO_CAR_TABLE,
+        type: :string,
+        desc: "Table name to store cars in"
+      },
+
+      crate_io_servers: {
+        default: DEFAULT_CRATE_IO_SERVERS,
+        type: :array,
+        desc: "Servers to connect to for crate.io backed CarStore"
+      }
+    }.freeze
+
+    def self.included(base)
+      super
+      CLASS_OPTIONS.each { |name, opts| base.class_option(name, opts) }
     end
-    # rubocop:enable Metrics/MethodLength
 
     private
 
