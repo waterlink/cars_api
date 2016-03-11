@@ -20,6 +20,27 @@ $ ./bin/setup
 
 ## Usage
 
+Full list of commands and global options:
+
+```bash
+$ bundle exec ./exe/cars_api help
+Commands:
+  cars_api help [COMMAND]  # Describe available commands or one specific command
+  cars_api import FILE     # Import car locations from JSON file
+  cars_api server          # Start API server
+
+Options:
+  [--car-store=CAR_STORE]                    # CarStore adapter to use
+                                             # Default: file-based
+                                             # Possible values: in-memory, file-based, crate-io
+  [--file-based-path=FILE_BASED_PATH]        # File based CarStore file path
+                                             # Default: ./car_store.json
+  [--crate-io-car-table=CRATE_IO_CAR_TABLE]  # Table name to store cars in
+                                             # Default: cars_api_development_cars
+  [--crate-io-servers=one two three]         # Servers to connect to for crate.io backed CarStore
+                                             # Default: ["localhost:4200"]
+```
+
 ### Run API server
 
 ```bash
@@ -30,10 +51,85 @@ $ bundle exec ./exe/cars_api server
 $ bundle exec cars_api server
 ```
 
+By default server runs in file-based mode. By providing `--car-store=CAR_STORE`
+CLI option one can change that. In particular, there is support for `crate.io`
+database:
+
+```bash
+# assumes you have docker installed
+# alternatively one could run: $ docker-compose up
+$ bin/docker-launch-crate-io
+...
+
+# and run the server, that will use this crate.io instance
+$ bundle exec cars_api server \
+  --car-store=crate-io \
+  --crate-io-servers="localhost:4200"   # by the way this is a default value
+```
+
+Full list of options can be found via `help server` command:
+
+```bash
+$ bundle exec cars_api help server
+Usage:
+  cars_api server
+
+Options:
+  [--server=SERVER]                          # Server to use
+                                             # Default: thin
+  [--server-require=SERVER_REQUIRE]          # Custom require to load server library (default=(--server value))
+  [--server-port=N]                          # Custom port to run server on
+                                             # Default: 4567
+  [--server-bind=SERVER_BIND]                # Custom ip address to bind server to
+                                             # Default: localhost
+  [--car-store=CAR_STORE]                    # CarStore adapter to use
+                                             # Default: file-based
+                                             # Possible values: in-memory, file-based, crate-io
+  [--file-based-path=FILE_BASED_PATH]        # File based CarStore file path
+                                             # Default: ./car_store.json
+  [--crate-io-car-table=CRATE_IO_CAR_TABLE]  # Table name to store cars in
+                                             # Default: cars_api_development_cars
+  [--crate-io-servers=one two three]         # Servers to connect to for crate.io backed CarStore
+                                             # Default: ["localhost:4200"]
+
+Start API server
+```
+
 ### Import cars locations from `JSON` formatted file
 
-```
+```bash
 $ bundle exec cars_api import /path/to/data.json
+```
+
+This command needs to use same `CarStore` configuration that `server` uses, for example:
+
+```bash
+$ bundle exec cars_api import \
+  --car-store=crate-io \
+  --crate-io-servers="crateio.example.org:4200" \
+  --crate-io-car-table="production_cars" \
+  /path/to/data.json
+```
+
+Full list of available options:
+
+```bash
+$ bundle exec cars_api help import
+Usage:
+  cars_api import FILE
+
+Options:
+  [--car-store=CAR_STORE]                    # CarStore adapter to use
+                                             # Default: file-based
+                                             # Possible values: in-memory, file-based, crate-io
+  [--file-based-path=FILE_BASED_PATH]        # File based CarStore file path
+                                             # Default: ./car_store.json
+  [--crate-io-car-table=CRATE_IO_CAR_TABLE]  # Table name to store cars in
+                                             # Default: cars_api_development_cars
+  [--crate-io-servers=one two three]         # Servers to connect to for crate.io backed CarStore
+                                             # Default: ["localhost:4200"]
+
+Import car locations from JSON file
 ```
 
 ## Development
