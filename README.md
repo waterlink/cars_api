@@ -97,6 +97,8 @@ Start API server
 
 ### Import cars locations from `JSON` formatted file
 
+Example data file can be found [here](/spec/fixtures/data.json).
+
 ```bash
 $ bundle exec cars_api import /path/to/data.json
 ```
